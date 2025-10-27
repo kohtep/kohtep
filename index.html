@@ -3,31 +3,333 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Anonymous</title>
-  <style>
-    body {
-      margin: 0;
-      height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: #0f172a;
-      color: #e5e7eb;
-      font-family: system-ui, sans-serif;
-    }
-    .box {
-      border: 1px solid #1f2937;
-      border-radius: 8px;
-      padding: 2rem 3rem;
-      text-align: center;
-      background: #111827;
-    }
-  </style>
+  <title>Aleksandr B.</title>
+  
+  <link rel="preload" as="image" href="resources/bg/background-2.avif" type="image/avif">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="box">
-    <h1>Anonymous</h1>
-    <p>Minimal placeholder website</p>
-  </div>
+  <section class="info-card slide-up" aria-labelledby="about-title">
+    <header class="info-header">
+      <h2 id="about-title">Aleksandr B.</h2>
+      <div class="divider" aria-hidden="true"></div>
+    </header>
+
+    <div class="info-columns">
+      <div class="info-col overview-col">
+        <!--<h3 class="col-title">Overview</h3>-->
+        <p>Software engineer focused on low-level development, reverse engineering, and system vulnerability research.</p>
+        <p>Proficient in <strong>Delphi</strong>, <strong>C/C++</strong>, and <strong>x86/x64</strong> architectures.</p>
+        <p>
+          I also love 
+          <span class="tooltip" data-tooltip="Tomoko Kuroki">social anxiety girls</span>
+          and 
+          <span class="tooltip" data-tooltip="Kikuri Hiroi">drunk anime bass women</span>.
+        </p>
+      </div>
+
+      <div class="info-col profile-col">
+        <picture>
+          <source srcset="resources/pfp/pfp_kikuri.avif" type="image/avif">
+          <source srcset="resources/pfp/pfp_kikuri.webp" type="image/webp">
+          <img class="profile-media" src="resources/pfp/pfp_kikuri.jpg" alt="Profile media">
+        </picture>
+
+        <div class="social-icons">
+          <a href="https://github.com/kohtep" target="_blank" title="Github"><i class="fa-brands fa-github"></i></a>          
+          <a href="https://t.me/kohtep" target="_blank" title="Telegram"><i class="fa-brands fa-telegram"></i></a>
+          <a href="https://steamcommunity.com/profiles/76561198045711038" target="_blank" title="Steam"><i class="fa-brands fa-steam"></i></a>
+        </div>
+      </div>
+    </div>
+    <div class="info-body">
+      <div class="btn-row">
+        <button type="button" class="btn btn-girls">My girls ✨</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="placeholder-screen is-hidden" aria-labelledby="placeholder-title">
+    <div class="placeholder-layout">
+      <div class="char-col">
+        <div class="char-stage"><!-- image injected dynamically --></div>
+        <div class="char-grid">
+          <div class="char-row char-row-1"></div>
+          <div class="char-row char-row-2"></div>
+          <div class="char-row char-row-3"></div>
+          <div class="char-row char-row-4"></div>
+        </div>
+      </div>
+      <!-- text block injected dynamically -->
+    </div>
+
+    <nav class="girls-strip" aria-label="Characters">
+      <ul class="girls-list">
+        <li>
+          <button class="girl-btn" data-name="Kikuri Hiroi" data-character="kikuri">
+            <img src="resources/girls/girls-previews/kikuri_hiroi.jpg" alt="Kikuri Hiroi" class="girl-thumb">
+          </button>
+        </li>
+        <li>
+          <button class="girl-btn" data-name="Tomoko Kuroki" data-character="tomoko">
+            <img src="resources/girls/girls-previews/kuroki_tomoko.jpg" alt="Tomoko Kuroki" class="girl-thumb">
+          </button>
+        </li>
+      </ul>
+    </nav>
+  </section>
+
+  <script>
+    const card = document.querySelector('.info-card');
+    const placeholder = document.querySelector('.placeholder-screen');
+    const body = document.body;
+
+    const girlsBtn = document.querySelector('.info-card .btn-girls');
+    const thumbButtons = [...document.querySelectorAll('.girl-btn')];
+
+    const CHARACTERS = {
+      kikuri: {
+        imageBase: 'resources/girls/kikuri_hiroi',
+        fallbackExt: 'png',
+        title: 'Kikuri Hiroi',
+        subtitle: 'art by @schu_1112',
+        meta: [
+          ['Source','Bocchi the Rock!'],
+          ['Age','25'],
+          ['Birthday','September 28'],
+          ['Height','158 cm'],
+          ['Weight','43 kg'],
+          ['Occupation','Bassist']
+        ],
+        paragraphs: [
+          'My favorite drunk anime woman bassist. She has an extraordinary personality and an aura that makes you want to get absolutely wasted in her company and fall asleep cuddling together in your lonely apartment.',
+          'When sober, she falls into depression and apathy due to numerous social problems that resurface in her mind as her self-reflection kicks in.',
+          'Can I fix her? Haha, come on, I\'m kidding. Unless I\'m not... Haha, nah, I\'m kidding... unless?..'
+        ]
+      },
+      tomoko: {
+        imageBase: 'resources/girls/kuroki_tomoko',
+        fallbackExt: 'png',
+        title: 'Tomoko Kuroki',
+        subtitle: 'art by @itsukawa',
+        meta: [
+          ['Source','WataMote'],
+          ['Age','15-18'],
+          ['Birthday','February ??'],
+          ['Height','~148-152 cm'],
+          ['Weight','41 kg'],
+          ['Occupation','Student']
+        ],
+        paragraphs: [
+          'My dearest insecure schoolgirl. Must be protected and spoiled.',
+          'Her mix of outward uncertainty and an inner world full of sarcasm and cynicism is strangely captivating, and her clumsy attempts to fit into society evoke both affection and sadness at the same time.',
+          'All in all, the perfect little sister.'
+        ]
+      }
+    };
+
+    function setCharacterPicture(pictureEl, data) {
+      const sAvif = pictureEl.querySelector('.char-source-avif');
+      const sWebp = pictureEl.querySelector('.char-source-webp');
+      const img = pictureEl.querySelector('.char-image');
+
+      if (data.imageBase) {
+        const base = data.imageBase;
+        const fbExt = data.fallbackExt || 'png';
+        sAvif.srcset = `${base}.avif`;
+        sWebp.srcset = `${base}.webp`;
+        img.src = `${base}.${fbExt}`;
+      } else if (data.images) {
+        if (data.images.avif) sAvif.srcset = data.images.avif;
+        if (data.images.webp) sWebp.srcset = data.images.webp;
+        img.src = data.images.fallback;
+      } else if (data.image) {
+        img.src = data.image;
+      }
+
+      img.alt = data.title || '';
+    }
+
+    function forceReflow(el) { void el.offsetHeight; }
+
+    function playIn(el) {
+      el.classList.remove('is-hidden','leaving');
+      el.classList.add('pre-enter');
+      forceReflow(el);
+      el.classList.add('appear');
+      el.addEventListener('animationend', () => {
+        el.classList.remove('appear','pre-enter');
+      }, { once: true });
+    }
+
+    function playOut(el, onDone) {
+      el.classList.remove('appear','pre-enter');
+      el.classList.add('leaving');
+      el.addEventListener('animationend', () => {
+        el.classList.remove('leaving');
+        el.classList.add('is-hidden');
+        if (typeof onDone === 'function') onDone();
+      }, { once: true });
+    }
+
+    // Open Girls screen and auto-show the first character from the thumbnails list
+    function openGirls() {
+      if (card.classList.contains('is-hidden')) return;
+      body.classList.add('bg-alt','show-girls');
+      playOut(card, () => {
+        playIn(placeholder);
+        const firstBtn = document.querySelector('.girls-list .girl-btn');
+        const firstKey = firstBtn?.dataset.character;
+        if (firstKey) renderCard(firstKey, true);
+      });
+    }
+
+    function goHome() {
+      if (placeholder.classList.contains('is-hidden')) return;
+      playOut(placeholder, () => {
+        body.classList.remove('bg-alt','show-girls');
+        playIn(card);
+      });
+    }
+
+    function setActiveThumbByKey(key) {
+      document.querySelectorAll('.girls-list li').forEach(li => li.classList.remove('is-active'));
+      document.querySelectorAll('.girl-btn').forEach(b => b.removeAttribute('aria-current'));
+      const btn = document.querySelector(`.girl-btn[data-character="${key}"]`);
+      if (!btn) return;
+      const li = btn.closest('li');
+      if (li) li.classList.add('is-active');
+      btn.setAttribute('aria-current','true');
+    }
+
+    function renderCard(key, instant) {
+      const data = CHARACTERS[key];
+      if (!data) return;
+
+      const tpl = document.getElementById('tpl-card');
+      const frag = tpl.content.cloneNode(true);
+
+      const picture = frag.querySelector('.char-picture');
+      setCharacterPicture(picture, data);
+
+      const text = frag.querySelector('.placeholder-text');
+      text.querySelector('.pt-title').textContent = data.title;
+      text.querySelector('.pt-subtitle').textContent = data.subtitle;
+
+      const meta = text.querySelector('.pt-meta');
+      meta.innerHTML = '';
+      data.meta.forEach(([k,v]) => {
+        const row = document.createElement('div');
+        row.className = 'pt-meta-row';
+        const dt = document.createElement('dt'); dt.textContent = k;
+        const dd = document.createElement('dd'); dd.textContent = v;
+        row.appendChild(dt); row.appendChild(dd);
+        meta.appendChild(row);
+      });
+
+      const paragraphs = text.querySelector('.pt-paragraphs');
+      paragraphs.innerHTML = '';
+      data.paragraphs.forEach(p => {
+        const el = document.createElement('p');
+        el.className = 'pt-body';
+        el.textContent = p;
+        paragraphs.appendChild(el);
+      });
+
+      const stage = document.querySelector('.char-stage');
+      const oldVisual = stage.firstElementChild;
+      const layout = document.querySelector('.placeholder-layout');
+      const oldText = layout.querySelector('.placeholder-text');
+
+      function animateIn(newVisualEl, newTextEl) {
+        if (newVisualEl) {
+          stage.innerHTML = '';
+          stage.appendChild(newVisualEl);
+          if (!instant) {
+            newVisualEl.classList.add('pre-enter');
+            void newVisualEl.offsetHeight;
+            newVisualEl.classList.add('appear');
+            newVisualEl.addEventListener('animationend', () => {
+              newVisualEl.classList.remove('appear','pre-enter');
+            }, { once: true });
+          }
+        }
+        if (newTextEl) {
+          if (oldText && oldText.parentNode) {
+            oldText.parentNode.replaceChild(newTextEl, oldText);
+          } else {
+            layout.appendChild(newTextEl);
+          }
+          if (!instant) {
+            newTextEl.classList.add('pre-enter');
+            void newTextEl.offsetHeight;
+            newTextEl.classList.add('appear');
+            newTextEl.addEventListener('animationend', () => {
+              newTextEl.classList.remove('appear','pre-enter');
+            }, { once: true });
+          }
+          const bb = newTextEl.querySelector('.btn-back');
+          if (bb) bb.addEventListener('click', goHome, { once: true });
+        }
+        setActiveThumbByKey(key);
+      }
+
+      if (instant) {
+        animateIn(picture, text);
+        return;
+      }
+
+      const outTargets = [];
+      if (oldVisual) outTargets.push(oldVisual);
+      if (oldText) outTargets.push(oldText);
+
+      if (!outTargets.length) {
+        animateIn(picture, text);
+        return;
+      }
+
+      let done = 0;
+      outTargets.forEach(el => {
+        el.classList.remove('appear','pre-enter','is-hidden');
+        el.classList.add('leaving');
+        el.addEventListener('animationend', () => {
+          el.classList.remove('leaving');
+          if (++done === outTargets.length) animateIn(picture, text);
+        }, { once: true });
+      });
+    }
+
+    function selectCharacter(btn) {
+      const key = btn.dataset.character;
+      if (!key) return;
+      if (card && !card.classList.contains('is-hidden')) {
+        openGirls();
+        placeholder.addEventListener('animationend', () => renderCard(key, true), { once: true });
+        return;
+      }
+      renderCard(key, false);
+    }
+
+    if (girlsBtn) girlsBtn.addEventListener('click', openGirls);
+    thumbButtons.forEach(btn => btn.addEventListener('click', () => selectCharacter(btn)));
+  </script>
+
+  <template id="tpl-card">
+    <picture class="char-picture">
+      <source class="char-source-avif" type="image/avif">
+      <source class="char-source-webp" type="image/webp">
+      <img class="char-image" alt="Character">
+    </picture>
+    <section class="placeholder-text">
+      <h2 class="pt-title"></h2>
+      <p class="pt-subtitle"></p>
+      <dl class="pt-meta"></dl>
+      <div class="pt-paragraphs"></div>
+      <div class="btn-row">
+        <button type="button" class="btn btn-back" aria-label="Back to home">← Back to home</button>
+      </div>
+    </section>
+  </template>
 </body>
 </html>
