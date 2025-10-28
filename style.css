@@ -254,6 +254,13 @@ body::after {
 body.bg-alt::before { opacity: 0; }
 body.bg-alt::after  { opacity: 1; }
 
+@media (max-width: 820px) {
+  body::before,
+  body::after {
+    inset: -15svh 0 -15svh 0;
+  }
+}
+
 /* Initial page veil fade-in */
 html::before {
   content: "";
@@ -282,7 +289,7 @@ html::before {
   display: grid;
   grid-template-rows: 0.8fr 2.2fr 0.7fr 0.6fr;
   gap: 12px;
-  min-height: calc(100vh - 160px);
+  min-height: calc(100svh - 160px);
   height: 100%;
 }
 .char-grid {
@@ -309,7 +316,7 @@ html::before {
 .char-image {
   width: clamp(var(--char-min), var(--char-ideal), var(--char-max));
   height: auto;
-  max-height: calc(100vh - 180px);
+  max-height: calc(100svh - 180px);
   object-fit: contain;
   transform-origin: 50% 50%;
 }
@@ -327,7 +334,7 @@ html::before {
   .social-icons { gap: 16px; }
 
   .placeholder-layout { grid-template-columns: 1fr; gap: 18px; }
-  .char-col { grid-template-rows: 0.6fr 2fr 0.6fr 0.5fr; min-height: calc(100vh - 140px); }
+  .char-col { grid-template-rows: 0.6fr 2fr 0.6fr 0.5fr; min-height: calc(100svh - 140px); }
   :root { --char-ideal: 70vmin; --char-max: 640px; }
 }
 
