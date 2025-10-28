@@ -462,8 +462,8 @@ body.show-girls .girls-strip {
 .girls-list li.is-active .girl-thumb,
 .girl-btn[aria-current="true"] .girl-thumb {
   outline: 2px solid rgba(255,255,255,0.95);
-  outline-offset: 3px;
-  box-shadow: 0 0 0 3px rgba(255,255,255,0.28), 0 8px 18px rgba(0,0,0,0.5);
+  outline-offset: 0;
+  box-shadow: none;
 }
 .girl-btn::after {
   content: attr(data-name);

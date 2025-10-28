@@ -93,6 +93,11 @@
     const girlsBtn = document.querySelector('.info-card .btn-girls');
     const thumbButtons = [...document.querySelectorAll('.girl-btn')];
 
+    let isTransitioning = false;
+    let isSelectionLocked = false;
+    let currentKey = null;
+    let pendingKey = null;
+
     const CHARACTERS = {
       kikuri: {
         imageBase: 'resources/girls/kikuri_hiroi',
@@ -120,9 +125,9 @@
         subtitle: 'art by にしおと',
         meta: [
           ['Source','WataMote'],
-          ['Age','15-18'],
+          ['Age','15'],
           ['Birthday','February ??'],
-          ['Height','~148-152 cm'],
+          ['Height','148 cm'],
           ['Weight','41 kg'],
           ['Occupation','Student']
         ],
@@ -139,7 +144,7 @@
         subtitle: 'art by kerorira',
         meta: [
           ['Source','Bocchi the Rock!'],
-          ['Age','15-17'],
+          ['Age','15'],
           ['Birthday','February 21'],
           ['Height','156 cm'],
           ['Weight','50 kg'],
@@ -157,7 +162,6 @@
       const sAvif = pictureEl.querySelector('.char-source-avif');
       const sWebp = pictureEl.querySelector('.char-source-webp');
       const img = pictureEl.querySelector('.char-image');
-
       if (data.imageBase) {
         const base = data.imageBase;
         const fbExt = data.fallbackExt || 'png';
@@ -171,7 +175,6 @@
       } else if (data.image) {
         img.src = data.image;
       }
-
       img.alt = data.title || '';
     }
 
@@ -197,23 +200,35 @@
       }, { once: true });
     }
 
-    // Open Girls screen and auto-show the first character from the thumbnails list
     function openGirls() {
       if (card.classList.contains('is-hidden')) return;
+      if (isTransitioning) return;
+      isTransitioning = true;
       body.classList.add('bg-alt','show-girls');
       playOut(card, () => {
         playIn(placeholder);
         const firstBtn = document.querySelector('.girls-list .girl-btn');
         const firstKey = firstBtn?.dataset.character;
-        if (firstKey) renderCard(firstKey, true);
+        if (!firstKey) { isTransitioning = false; return; }
+        if (firstKey === currentKey) {
+          setActiveThumbByKey(currentKey);
+          isTransitioning = false;
+          return;
+        }
+        renderCard(firstKey, true);
       });
     }
 
     function goHome() {
       if (placeholder.classList.contains('is-hidden')) return;
+      if (isTransitioning) return;
+      isTransitioning = true;
+      pendingKey = null;
+      isSelectionLocked = false;
       playOut(placeholder, () => {
         body.classList.remove('bg-alt','show-girls');
         playIn(card);
+        isTransitioning = false;
       });
     }
 
@@ -228,9 +243,12 @@
     }
 
     function renderCard(key, instant) {
-      const data = CHARACTERS[key];
-      if (!data) return;
+      if (!CHARACTERS[key]) return;
+      if (isTransitioning && !instant) return;
+      if (key === currentKey) { isTransitioning = false; return; }
+      isTransitioning = true;
 
+      const data = CHARACTERS[key];
       const tpl = document.getElementById('tpl-card');
       const frag = tpl.content.cloneNode(true);
 
@@ -266,19 +284,48 @@
       const layout = document.querySelector('.placeholder-layout');
       const oldText = layout.querySelector('.placeholder-text');
 
+      function finishTransition() {
+        currentKey = key;
+        isTransitioning = false;
+
+        const bb = layout.querySelector('.btn-back');
+        if (bb) {
+          bb.onclick = null;
+          bb.addEventListener('click', goHome, { once: true });
+        }
+        setActiveThumbByKey(key);
+
+        if (pendingKey && pendingKey !== currentKey) {
+          const next = pendingKey;
+          pendingKey = null;
+          isSelectionLocked = true;
+          renderCard(next, false);
+          return;
+        }
+
+        pendingKey = null;
+        isSelectionLocked = false;
+      }
+
       function animateIn(newVisualEl, newTextEl) {
+        let waits = 0;
+        let done = 0;
+
         if (newVisualEl) {
           stage.innerHTML = '';
           stage.appendChild(newVisualEl);
           if (!instant) {
+            waits++;
             newVisualEl.classList.add('pre-enter');
             void newVisualEl.offsetHeight;
             newVisualEl.classList.add('appear');
             newVisualEl.addEventListener('animationend', () => {
               newVisualEl.classList.remove('appear','pre-enter');
+              done++; if (done === waits) finishTransition();
             }, { once: true });
           }
         }
+
         if (newTextEl) {
           if (oldText && oldText.parentNode) {
             oldText.parentNode.replaceChild(newTextEl, oldText);
@@ -286,17 +333,18 @@
             layout.appendChild(newTextEl);
           }
           if (!instant) {
+            waits++;
             newTextEl.classList.add('pre-enter');
             void newTextEl.offsetHeight;
             newTextEl.classList.add('appear');
             newTextEl.addEventListener('animationend', () => {
               newTextEl.classList.remove('appear','pre-enter');
+              done++; if (done === waits) finishTransition();
             }, { once: true });
           }
-          const bb = newTextEl.querySelector('.btn-back');
-          if (bb) bb.addEventListener('click', goHome, { once: true });
         }
-        setActiveThumbByKey(key);
+
+        if (instant || waits === 0) finishTransition();
       }
 
       if (instant) {
@@ -313,13 +361,14 @@
         return;
       }
 
-      let done = 0;
+      let outDone = 0;
       outTargets.forEach(el => {
         el.classList.remove('appear','pre-enter','is-hidden');
         el.classList.add('leaving');
         el.addEventListener('animationend', () => {
           el.classList.remove('leaving');
-          if (++done === outTargets.length) animateIn(picture, text);
+          outDone++;
+          if (outDone === outTargets.length) animateIn(picture, text);
         }, { once: true });
       });
     }
@@ -327,11 +376,26 @@
     function selectCharacter(btn) {
       const key = btn.dataset.character;
       if (!key) return;
+      if (isSelectionLocked) return;
+
+      if (isTransitioning) {
+        pendingKey = key;
+        isSelectionLocked = true;
+        setActiveThumbByKey(key);
+        return;
+      }
+
+      if (key === currentKey) return;
+
+      isSelectionLocked = true;
+      setActiveThumbByKey(key);
+
       if (card && !card.classList.contains('is-hidden')) {
         openGirls();
         placeholder.addEventListener('animationend', () => renderCard(key, true), { once: true });
         return;
       }
+
       renderCard(key, false);
     }
 
