@@ -230,10 +230,11 @@ body::after {
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center center;
-  background-attachment: fixed;
   z-index: -2;
   opacity: 0;
   transition: opacity .6s ease;
+  will-change: opacity;
+  transform: translateZ(0);
 }
 body::before {
   opacity: 1;
