@@ -142,6 +142,7 @@ body {
   line-height: 1;
   transition: background 0.2s ease, transform 0.06s ease;
   text-align: center;
+  cursor: pointer;
 }
 .btn:hover { background: var(--btn-bg-hover); }
 .btn:active { transform: translateY(1px); }
@@ -448,6 +449,7 @@ body.show-girls .girls-strip {
   place-items: center;
   transition: transform .12s ease;
   position: relative;
+  cursor: pointer;
 }
 .girl-btn:active { transform: translateY(1px); }
 .girl-thumb {

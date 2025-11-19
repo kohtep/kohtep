@@ -37,9 +37,9 @@
 
       <div class="info-col profile-col">
         <picture>
-          <source srcset="resources/pfp/pfp_kikuri.avif" type="image/avif">
-          <source srcset="resources/pfp/pfp_kikuri.webp" type="image/webp">
-          <img class="profile-media" src="resources/pfp/pfp_kikuri.jpg" alt="Profile media">
+          <source srcset="resources/pfp/pfp_tomoko.avif" type="image/avif">
+          <source srcset="resources/pfp/pfp_tomoko.webp" type="image/webp">
+          <img class="profile-media" src="resources/pfp/pfp_tomoko.jpg" alt="Profile media">
         </picture>
 
         <div class="social-icons">
@@ -206,6 +206,15 @@
       }, { once: true });
     }
 
+    document.addEventListener('click', (e) => {
+      const back = e.target.closest('.btn-back');
+      if (!back) return;
+
+      if (!isTransitioning) {
+        goHome();
+      }
+    });
+
     function openGirls() {
       if (card.classList.contains('is-hidden')) return;
       if (isTransitioning) return;
@@ -294,11 +303,6 @@
         currentKey = key;
         isTransitioning = false;
 
-        const bb = layout.querySelector('.btn-back');
-        if (bb) {
-          bb.onclick = null;
-          bb.addEventListener('click', goHome, { once: true });
-        }
         setActiveThumbByKey(key);
 
         if (pendingKey && pendingKey !== currentKey) {
@@ -424,6 +428,6 @@
         <button type="button" class="btn btn-back" aria-label="Back to home">← Back to home</button>
       </div>
     </section>
-  </template>
+  </template> 
 </body>
 </html>
