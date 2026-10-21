@@ -19,11 +19,17 @@
                 </div>
 
                 <div class="author">
-                    <div class="author-name" id="author-name">Loading...</div>
-                    <div class="author-meta">
-                        <span id="author-handle"></span>
+                    <div class="author-line">
+                        <span class="author-name" id="author-name">Loading...</span>
+                        <span class="verified-badge" id="verified-badge" role="img" aria-label="Verified account" title="Verified account">
+                            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                                <path class="badge-shape" d="M23 12l-2.44-2.79.34-3.69-3.61-.82L15.4 1.5 12 3 8.6 1.5 6.7 4.7l-3.6.82.34 3.69L1 12l2.44 2.79-.34 3.69 3.61.82L8.6 22.5 12 21l3.4 1.5 1.9-3.2 3.6-.82-.34-3.69Z"/>
+                                <path class="badge-check" d="m10.09 16.72-3.8-3.8 1.42-1.41 2.38 2.38 5.8-5.8 1.42 1.41Z"/>
+                            </svg>
+                        </span>
+                        <span class="author-handle" id="author-handle"></span>
                         <span class="meta-divider" id="date-divider" hidden>·</span>
-                        <time id="post-date" hidden></time>
+                        <time class="post-date" id="post-date" hidden></time>
                     </div>
                 </div>
             </div>

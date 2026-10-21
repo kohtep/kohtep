@@ -6,6 +6,7 @@ const assetUrls = [];
 
 const elements = {
     authorName: document.getElementById("author-name"),
+    verifiedBadge: document.getElementById("verified-badge"),
     authorHandle: document.getElementById("author-handle"),
     postDate: document.getElementById("post-date"),
     dateDivider: document.getElementById("date-divider"),
@@ -79,6 +80,9 @@ function validateManifest(manifest)
     if (typeof manifest.author.handle !== "string" || !manifest.author.handle.trim())
         throw new Error("Missing author.handle in JSON.");
 
+    if (manifest.author.verified !== undefined && typeof manifest.author.verified !== "boolean")
+        throw new Error("author.verified must be a boolean if supplied.");
+
     if (typeof manifest.post.text !== "string")
         throw new Error("Missing post.text in JSON.");
 
@@ -102,6 +106,7 @@ function renderManifest(manifest)
 
     document.title = String(manifest.siteTitle || name);
     elements.authorName.textContent = name;
+    elements.verifiedBadge.hidden = manifest.author.verified === false;
     elements.authorHandle.textContent = `@${handle}`;
     elements.avatarFallback.textContent = name.slice(0, 1).toUpperCase();
     elements.postText.textContent = postText;
