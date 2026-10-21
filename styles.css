@@ -173,6 +173,14 @@ body
     flex: none;
 }
 
+.verified-badge,
+.author-handle,
+.meta-divider,
+.post-date
+{
+    transform: translateY(2px);
+}
+
 .post-text
 {
     margin: 0;
