@@ -45,12 +45,19 @@ body
     padding: clamp(30px, 10vh, 110px) 0 65px;
 }
 
+.posts-root
+{
+    display: grid;
+    gap: 18px;
+}
+
 .post
 {
+    min-width: 0;
     overflow: hidden;
     border: 1px solid var(--panel-border);
     border-radius: 6px;
-    padding: 14px 15px 14px;
+    padding: 14px 15px;
     background: var(--panel);
     box-shadow: 0 23px 73px rgb(0 0 0 / 28%);
 }
@@ -174,7 +181,6 @@ body
     flex: none;
 }
 
-
 .post-content
 {
     min-width: 0;
@@ -195,14 +201,23 @@ body
 {
     position: relative;
     display: flex;
+    width: 100%;
+    aspect-ratio: 16 / 9;
     align-items: center;
     justify-content: center;
-    aspect-ratio: 16 / 9;
     margin: 0 0 7px;
     overflow: hidden;
-    border-radius: 6px;
     border: 1px solid #09111a;
+    border-radius: 6px;
     background: #000;
+}
+
+.media[data-orientation="portrait"]
+{
+    aspect-ratio: var(--video-aspect-ratio, 9 / 16);
+    width: min(100%, 440px);
+    margin-right: auto;
+    margin-left: auto;
 }
 
 .media video
@@ -227,7 +242,8 @@ body
     text-align: center;
 }
 
-.error-message
+.error-message,
+.page-error
 {
     margin: 0;
     padding: 3px 0 10px;
@@ -235,6 +251,56 @@ body
     font-size: 15px;
     line-height: 1.5;
     overflow-wrap: anywhere;
+}
+
+.site-footer
+{
+    margin-top: 26px;
+    padding: 2px 12px 0;
+    color: var(--subtle);
+    text-align: center;
+}
+
+.footer-links
+{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    row-gap: 9px;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.footer-item
+{
+    display: inline-flex;
+    max-width: 100%;
+    align-items: center;
+}
+
+.footer-link
+{
+    min-width: 0;
+    overflow-wrap: anywhere;
+    color: var(--subtle);
+    text-decoration: none;
+    transition: color 0.15s ease;
+}
+
+.footer-link:hover,
+.footer-link:focus-visible
+{
+    color: var(--accent);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+.footer-separator
+{
+    padding: 0 9px;
+    color: #53697a;
+    user-select: none;
 }
 
 @media (max-width: 600px)
@@ -255,7 +321,6 @@ body
         gap: 10px;
         padding: 0 0 9px;
     }
-
 
     .avatar-shell
     {

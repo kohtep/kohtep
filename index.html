@@ -4,47 +4,55 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#0b1119">
-    <meta name="description" content="Video post">
-    <title>Post</title>
+    <meta name="description" content="Video posts">
+    <title>Posts</title>
     <link rel="stylesheet" href="./styles.css">
     <script src="./app.js" defer></script>
 </head>
 <body>
     <main class="page">
+        <div class="posts-root" id="posts-root" aria-label="Posts"></div>
+        <p class="page-error" id="page-error" role="alert" hidden></p>
+        <footer class="site-footer" id="site-footer" hidden>
+            <nav class="footer-links" id="footer-links" aria-label="Footer links"></nav>
+        </footer>
+    </main>
+
+    <template id="post-template">
         <article class="post" aria-label="Video post">
             <div class="post-header">
                 <div class="avatar-shell">
-                    <span class="avatar-fallback" id="avatar-fallback" aria-hidden="true">·</span>
-                    <img class="avatar" id="avatar" alt="" hidden>
+                    <span class="avatar-fallback" aria-hidden="true">·</span>
+                    <img class="avatar" alt="" hidden>
                 </div>
 
                 <div class="author">
                     <div class="author-line">
-                        <span class="author-name" id="author-name">Loading...</span>
-                        <span class="verified-badge" id="verified-badge" role="img" aria-label="Verified account" title="Verified account">
+                        <span class="author-name"></span>
+                        <span class="verified-badge" role="img" aria-label="Verified account" title="Verified account">
                             <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                                 <path class="badge-shape" d="M23 12l-2.44-2.79.34-3.69-3.61-.82L15.4 1.5 12 3 8.6 1.5 6.7 4.7l-3.6.82.34 3.69L1 12l2.44 2.79-.34 3.69 3.61.82L8.6 22.5 12 21l3.4 1.5 1.9-3.2 3.6-.82-.34-3.69Z"/>
                                 <path class="badge-check" d="m10.09 16.72-3.8-3.8 1.42-1.41 2.38 2.38 5.8-5.8 1.42 1.41Z"/>
                             </svg>
                         </span>
-                        <span class="author-handle" id="author-handle"></span>
-                        <span class="meta-divider" id="date-divider" hidden>·</span>
-                        <time class="post-date" id="post-date" hidden></time>
+                        <span class="author-handle"></span>
+                        <span class="meta-divider" hidden>·</span>
+                        <time class="post-date" hidden></time>
                     </div>
                 </div>
             </div>
 
             <div class="post-content">
-                <p class="post-text" id="post-text" hidden></p>
+                <p class="post-text" hidden></p>
 
                 <div class="media">
-                    <video id="post-video" controls autoplay playsinline loop preload="auto" aria-label="Post video"></video>
-                    <div class="media-status" id="media-status" role="status" aria-live="polite">Loading video...</div>
+                    <video controls playsinline loop preload="auto" aria-label="Post video"></video>
+                    <div class="media-status" role="status" aria-live="polite">Loading video...</div>
                 </div>
 
-                <p class="error-message" id="error-message" role="alert" hidden></p>
+                <p class="error-message" role="alert" hidden></p>
             </div>
         </article>
-    </main>
+    </template>
 </body>
 </html>
