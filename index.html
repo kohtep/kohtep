@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#0b1119">
+    <meta name="description" content="Video post">
+    <title>Post</title>
+    <link rel="stylesheet" href="./styles.css">
+    <script src="./app.js" defer></script>
+</head>
+<body>
+    <main class="page">
+        <article class="post" aria-label="Video post">
+            <div class="post-header">
+                <div class="avatar-shell">
+                    <span class="avatar-fallback" id="avatar-fallback" aria-hidden="true">·</span>
+                    <img class="avatar" id="avatar" alt="" hidden>
+                </div>
+
+                <div class="author">
+                    <div class="author-name" id="author-name">Loading...</div>
+                    <div class="author-meta">
+                        <span id="author-handle"></span>
+                        <span class="meta-divider" id="date-divider" hidden>·</span>
+                        <time id="post-date" hidden></time>
+                    </div>
+                </div>
+            </div>
+
+            <p class="post-text" id="post-text" hidden></p>
+
+            <div class="media">
+                <video id="post-video" controls autoplay playsinline loop preload="auto" aria-label="Post video"></video>
+                <div class="media-status" id="media-status" role="status" aria-live="polite">Loading video...</div>
+                <button class="play-overlay" id="play-overlay" type="button" hidden>
+                    <svg aria-hidden="true" viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+                        <path d="M8 4.8a1 1 0 0 1 1.5-.86l11 7.2a1 1 0 0 1 0 1.72l-11 7.2A1 1 0 0 1 8 19.2Z" />
+                    </svg>
+                    <span>Play</span>
+                </button>
+            </div>
+
+            <p class="error-message" id="error-message" role="alert" hidden></p>
+        </article>
+    </main>
+</body>
+</html>
