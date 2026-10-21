@@ -15,7 +15,6 @@ const elements = {
     avatarFallback: document.getElementById("avatar-fallback"),
     video: document.getElementById("post-video"),
     mediaStatus: document.getElementById("media-status"),
-    playOverlay: document.getElementById("play-overlay"),
     errorMessage: document.getElementById("error-message")
 };
 
@@ -156,17 +155,11 @@ async function attemptPlayback()
     try
     {
         await elements.video.play();
-        elements.playOverlay.hidden = true;
     }
     catch (error)
     {
-        if (error.name === "NotAllowedError")
-        {
-            elements.playOverlay.hidden = false;
-            return;
-        }
-
-        throw error;
+        if (error.name !== "NotAllowedError")
+            throw error;
     }
 }
 
@@ -218,23 +211,6 @@ async function initialize()
     }
 }
 
-elements.playOverlay.addEventListener("click", async () =>
-{
-    try
-    {
-        await attemptPlayback();
-    }
-    catch (error)
-    {
-        console.error(error);
-        showError(`Playback error: ${error.message}`);
-    }
-});
-
-elements.video.addEventListener("playing", () =>
-{
-    elements.playOverlay.hidden = true;
-});
 
 window.addEventListener("pagehide", () =>
 {
